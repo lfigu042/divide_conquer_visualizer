@@ -29,7 +29,7 @@ public class algo_visualizer {
      * printArray() simply prints an array
      */
     public void printArray(int[] array, int sizeArray){
-        System.out.print("\n[");
+        System.out.print("[");
         for (int i=0; i< sizeArray; i++){
             System.out.print(array[i] + ",");
         }
@@ -42,7 +42,7 @@ public class algo_visualizer {
         fillArraySmallBlocks(array, sizeArray);
         Arrays.sort(array);
         printArray(array, sizeArray);
-        System.out.println("Array with BIG blocks of repeated keys: ");
+        System.out.println("\nArray with BIG blocks of repeated keys: ");
         fillArrayBigBlocks(array, sizeArray);
         Arrays.sort(array);
         printArray(array, sizeArray);
@@ -53,7 +53,7 @@ public class algo_visualizer {
     }
 
     public static void main(String[] args) {
-        System.out.print("It’s Not Whether You Get Knocked Down, It’s Whether You Get Up. <3");
+        System.out.println("It’s Not Whether You Get Knocked Down, It’s Whether You Get Up. <3");
         new algo_visualizer();
     }
 }
