@@ -35,17 +35,46 @@ public class algo_visualizer {
         }
         System.out.println("]");
     }
+    /**
+     * Three methods for finding appearances of element:
+     *   1 -> O(n) approach – sequentially test each element
+     *   2 -> O(m + log n) approach – find a location loc of k with binary-search and then count the number
+     * of occurrences of k to the left and right of loc (m is the total number of occurrences)
+     *   3 -> O(log n) approach – locate the boundaries of the block of occurrences of k in a.
+     */
+    public int sequential_search(int[] array, int k){
+        int count = 0;
+        for(int i = 0 ; i< array.length; i++){
+            if( array[i] == k){
+                count++;
+            }
+        }
+        System.out.println(k + " appears " + count + " times \n");
+        return count;
+    }
+    public int binary_search(int[] array, int k) {
+        return 0;
+    }
+    public int divide_conquer_search(int[] array, int k) {
+        return 0;
+    }
 
-    public void startTest(int sizeArray){
+        public void startTest(int sizeArray){
         int[] array = new int[sizeArray];
-        System.out.println("Array with SMALL blocks of repeated keys: ");
+
+        System.out.print("Array with SMALL blocks of repeated keys: ");
         fillArraySmallBlocks(array, sizeArray);
         Arrays.sort(array);
         printArray(array, sizeArray);
-        System.out.println("\nArray with BIG blocks of repeated keys: ");
+//        testing sequential search
+        sequential_search(array, 1);
+
+        System.out.print("Array with BIG blocks of repeated keys: ");
         fillArrayBigBlocks(array, sizeArray);
         Arrays.sort(array);
         printArray(array, sizeArray);
+//        testing sequential search
+        sequential_search(array, 1);
     }
 
     public algo_visualizer (){
@@ -53,7 +82,7 @@ public class algo_visualizer {
     }
 
     public static void main(String[] args) {
-        System.out.println("It’s Not Whether You Get Knocked Down, It’s Whether You Get Up. <3");
+        System.out.println("It’s Not Whether You Get Knocked Down, It’s Whether You Get Up. <3 \n");
         new algo_visualizer();
     }
 }
