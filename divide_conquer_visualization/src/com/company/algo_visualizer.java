@@ -56,13 +56,25 @@ public class algo_visualizer {
     public int sequential_search(int[] array, int k){
         int count = 0;      // We just need it for testing // ********* Remove this line later
         int comparisons = 0;    // Check the number of comparisons made to find the number
-        for(int i = 0 ; i< array.length; i++){
-            if( array[i] == k){
-                count++;
-            }
+
+        for(int i = 0 ; i < array.length; i++){ //loop array
             comparisons++;
+            if(array[i] <= k){ //array is sorted, if iterator gets bigger than 'k', then 'k' wasnt found
+                if(array[i] == k){
+                    while(array[i] == k){ 
+                        count++; 
+                        comparisons++;
+                        i++;
+                    }
+                    System.out.println(k + " was found and counted, ending 'for loop'...");
+                    break;
+                }
+            }else{ //end the search as soon as iterator becomes bigger than 'k'
+                System.out.println(k + " was not found in the array");
+                return comparisons;
+            }
         }
-        System.out.println(k + " appears " + count + " times");
+        System.out.println(k + " appears " + count + " times and was compared " + comparisons + " times");
         return comparisons;
     }
 
@@ -72,8 +84,42 @@ public class algo_visualizer {
      *  of occurrences of k to the left and right of loc (m is the total number of occurrences)
      */
     public int binary_search(int[] array, int k) {
-        return 0;
-    }
+        int count = 0;      // We just need it for testing // ********* Remove this line later
+        int comparisons = 0;    // Check the number of comparisons made to find the number
+        int left = 0;
+        int right = array.length - 1;
+       
+        while(left <= right){
+            int middle = (left + right) / 2;
+            if (k < array[middle]){
+                comparisons++;
+                right = middle - 1;
+            }else if (k > array[middle]){
+                comparisons++;
+                left = middle + 1;
+            }else{ //'k' has been found
+                //iterate to the left and right and find count of 'k'
+                // int i = left - 1; //next index to left of 'k'
+                // int j = right + 1; //next index to right of 'k'
+                // while(array[i] == k && i != 0){
+                //     i--;
+                //     comparisons++;
+                //     count++;
+                // }
+                // while(array[j] == k && j != array.length){
+                //     j++;
+                //     comparisons++;
+                //     count++;
+                // } 
+                count++;               
+                System.out.println(k + " appears " + count + " times and was compared " + comparisons + " times");
+                return comparisons;
+            }
+        }
+        // System.out.println(k + " appears " + count + " times and was compared " + comparisons + " times");
+        System.out.println(k + " not found");
+        return comparisons;
+      }
 
     /**
      * Method for finding appearances of element:
@@ -84,23 +130,35 @@ public class algo_visualizer {
     }
 
         public void startTest(int sizeArray){
-        int[] array = new int[sizeArray];
+            int[] array = new int[sizeArray];
 
-        System.out.print("Array with SMALL blocks of repeated keys: ");
-        int k = fillArraySmallBlocks(array, sizeArray);
-        Arrays.sort(array);
-        printArray(array, sizeArray);
-        //testing sequential search
-        int comparisons = sequential_search(array, k);
-        System.out.println("The number of comparisons made in O(n) approach is: " + comparisons);
+            System.out.print("Array with SMALL blocks of repeated keys: ");
+            int k = fillArraySmallBlocks(array, sizeArray); // k is a random number
+            Arrays.sort(array);
+            printArray(array, sizeArray);
+            
+            //testing sequential search
+            // int comparisons = sequential_search(array, k);
+            // System.out.println("The number of comparisons made in O(n) approach is: " + comparisons);
 
-        System.out.print("\nArray with BIG blocks of repeated keys: ");
-        int k2 = fillArrayBigBlocks(array, sizeArray);
-        Arrays.sort(array);
-        printArray(array, sizeArray);
-        // testing sequential search
-        int comparisons2 = sequential_search(array, k2);
-        System.out.println("The number of comparisons made in O(n) approach is: " + comparisons2);
+            //testing binary search
+            int comparisons = binary_search(array, k);
+            System.out.println("The number of comparisons made O(m + log n) approach is: " + comparisons);
+
+            System.out.print("\nArray with BIG blocks of repeated keys: ");
+            int k2 = fillArrayBigBlocks(array, sizeArray);
+            Arrays.sort(array);
+            printArray(array, sizeArray);
+
+            // testing sequential search
+            // int comparisons2 = sequential_search(array, k2);
+            // System.out.println("The number of comparisons made in O(n) approach is: " + comparisons2);
+            
+            //testing binary search
+            int comparisons2 = binary_search(array, k2);
+            System.out.println("The number of comparisons made for O(m+log n) approach is: " + comparisons2);
+    
+
     }
 
     public algo_visualizer (){
@@ -108,7 +166,7 @@ public class algo_visualizer {
     }
 
     public static void main(String[] args) {
-        System.out.println("It’s Not Whether You Get Knocked Down, It’s Whether You Get Up. <3 \n");
+        System.out.println("\n It’s Not Whether You Get Knocked Down, It’s Whether You Get Up. <3 \n");
         new algo_visualizer();
     }
 }
