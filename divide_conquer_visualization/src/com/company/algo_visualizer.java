@@ -99,24 +99,28 @@ public class algo_visualizer {
                 left = middle + 1;
             }else{ //'k' has been found
                 //iterate to the left and right and find count of 'k'
-                // int i = left - 1; //next index to left of 'k'
-                // int j = right + 1; //next index to right of 'k'
-                // while(array[i] == k && i != 0){
-                //     i--;
-                //     comparisons++;
-                //     count++;
-                // }
-                // while(array[j] == k && j != array.length){
-                //     j++;
-                //     comparisons++;
-                //     count++;
-                // } 
+                int i = middle - 1; //checks to the left 
+                int j = middle + 1; //checks to the right
+                
+                while(i >= 0){
+                    if(array[i] == k){
+                        i--;
+                        comparisons++;
+                        count++;                        
+                    } else break; 
+                }
+                while (j < array.length){
+                    if (array[j] == k){
+                        j++;
+                        comparisons++;
+                        count++;                       
+                    } else break;
+                } 
                 count++;               
                 System.out.println(k + " appears " + count + " times and was compared " + comparisons + " times");
                 return comparisons;
             }
         }
-        // System.out.println(k + " appears " + count + " times and was compared " + comparisons + " times");
         System.out.println(k + " not found");
         return comparisons;
       }
