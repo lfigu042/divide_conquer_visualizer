@@ -1,3 +1,13 @@
+/*
+ * ASSIGNMENT #01
+ *
+ * Laura Figeroa
+ * PantherID:
+ *
+ * Samara Ruiz Sandoval
+ * PantherID: 6090384
+ */
+
 package com.company;
 import java.util.Random;    //Library used to randomly generate numbers
 import java.util.Arrays;    //Library used to sort the arrays
@@ -10,13 +20,18 @@ import java.io.PrintWriter;
  *  many times a given value k occurs in an array sorted in a non-decreasing order.
  */
 public class algo_visualizer {
+    //Values for testing
+    final int SMALLEST_ARRAY_SIZE = 5;
+    final int LARGEST_ARRAY_SIZE = 500;
+    final int INCREMENTS = 5;
+
     public static void main(String[] args) {
         new algo_visualizer();
     }
 
     public algo_visualizer (){
         PrintWriter output = null;
-        boolean testSmallBlocks = true;     // *** CHANGE TO "FALSE" TO TEST LARGE BLOCKS OF REPEATED KEYS ***
+        boolean testSmallBlocks = false;     // *** CHANGE TO "FALSE" TO TEST LARGE BLOCKS OF REPEATED KEYS ***
         String outputFilename;
 
         if(testSmallBlocks)
@@ -33,7 +48,7 @@ public class algo_visualizer {
 
         output.println("Array size , O(n) , O[m + log(n)] , O[log(n)]");
 
-        for(int i = 5; i <= 500 ; i= i+5){
+        for(int i = SMALLEST_ARRAY_SIZE; i <= LARGEST_ARRAY_SIZE ; i= i+INCREMENTS){
             int[] comparisonData = startTest(i, testSmallBlocks);
             output.println(i + "," + comparisonData[0] + "," + comparisonData[1] + ","+ comparisonData[2]);
         }
@@ -49,15 +64,16 @@ public class algo_visualizer {
         if(testSmallBlocks){
             int k = fillArraySmallBlocks(array, sizeArray);         // Creation of the array with small blocks
             Arrays.sort(array);
-            printArray(array, sizeArray);
-            System.out.println(k+ "\n");
+            printArray(array, sizeArray);               // REMOVE: Just for testing purposes
+            System.out.println(k+ "\n");                // REMOVE: Just for testing purposes
             comparisonsData[0] = sequential_search(array, k);       // testing O(n)
             comparisonsData[1] = binary_search(array, k);           // testing O(m + log(n))
             comparisonsData[2] = divide_conquer_search(array,k);    // testing O(log(n))
         } else {
             int k2 = fillArrayBigBlocks(array, sizeArray);          // Creation of the array with large blocks
             Arrays.sort(array);
-            printArray(array, sizeArray);
+            printArray(array, sizeArray);               // REMOVE: Just for testing purposes
+            System.out.println(k2 + "\n");                // REMOVE: Just for testing purposes
             comparisonsData[0] = sequential_search(array, k2);       // testing O(n)
             comparisonsData[1] = binary_search(array, k2);           // testing O(m + log(n))
             comparisonsData[2] = divide_conquer_search(array,k2);    // testing O(log(n))
@@ -115,7 +131,7 @@ public class algo_visualizer {
         int comparisons = 0;    // Check the number of comparisons made to find the number
 
         for(int i = 0 ; i < array.length; i++){ //loop array
-            comparisons = comparisons + 2;      // comparison for the while loop and if statement
+            comparisons++;      // comparison for the while loop and if statement
             if(array[i] > k){      //end search as soon as iterator becomes bigger than 'k' since the array is sorted
                 break;
             }
@@ -193,7 +209,7 @@ public class algo_visualizer {
         if ( leftEnd >= array.length-1 || array[leftEnd] != k){
             return comparisons;
         }else{
-            int[] result2 = locateRightEnd(array,k);
+            int[] result2 = locateRightEnd(array, leftEnd, k);
             int rightEnd = result2[0];
             int comparisons2 = result2[1];
             int count = rightEnd - leftEnd + 1;
@@ -213,7 +229,7 @@ public class algo_visualizer {
 
         while(first <= last){
             int middle = (first + last) /2;
-            comparisons = comparisons + 2;   // We do two comparisons, with the while loop and with the if statement
+            comparisons++;   // We do two comparisons, with the while loop and with the if statement
             if (k <= array[middle]) {
                 last = middle -1;
             }else{
@@ -229,14 +245,14 @@ public class algo_visualizer {
      * Helper method of the divide and conquer approach that finds the beginning of the block of k's repeated elements.
      * We used as reference, the slides that professor Hernandez provided
      */
-    public int[] locateRightEnd(int[] array, int k){
+    public int[] locateRightEnd(int[] array, int first, int k){
+        // First will be the location of the left end since we already know the right end can't be before that point.
         int comparisons = 0;
-        int first = 0;
         int last = array.length - 1;
 
         while(first <= last){
             int middle = (first + last) /2;
-            comparisons = comparisons + 2;    // We do two comparisons, with the while loop and with the if statement
+            comparisons++;    // We do two comparisons, with the while loop and with the if statement
             if (k >= array[middle]) {
                 first  = middle + 1;
             }else{
