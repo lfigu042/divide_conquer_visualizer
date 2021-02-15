@@ -1,8 +1,9 @@
 /*
- * ASSIGNMENT #01
+ * ASSIGNMENT #1 - Algorithm Techniques
+ * Section: Section U01
  *
- * Laura Figeroa
- * PantherID:
+ * Laura Figueroa
+ * PantherID: 4918449
  *
  * Samara Ruiz Sandoval
  * PantherID: 6090384
@@ -21,9 +22,9 @@ import java.io.PrintWriter;
  */
 public class algo_visualizer {
     //Values for testing
-    final int SMALLEST_ARRAY_SIZE = 5;
-    final int LARGEST_ARRAY_SIZE = 500;
-    final int INCREMENTS = 5;
+    final int SMALLEST_ARRAY_SIZE = 50;
+    final int LARGEST_ARRAY_SIZE = 500000;
+    final int INCREMENTS = 50;
 
     public static void main(String[] args) {
         new algo_visualizer();
@@ -31,7 +32,7 @@ public class algo_visualizer {
 
     public algo_visualizer (){
         PrintWriter output = null;
-        boolean testSmallBlocks = false;     // *** CHANGE TO "FALSE" TO TEST LARGE BLOCKS OF REPEATED KEYS ***
+        boolean testSmallBlocks = true;     // *** CHANGE TO "FALSE" TO TEST LARGE BLOCKS OF REPEATED KEYS ***
         String outputFilename;
 
         if(testSmallBlocks)
@@ -62,17 +63,19 @@ public class algo_visualizer {
         int[] array = new int[sizeArray];
 
         if(testSmallBlocks){
-            int k = fillArraySmallBlocks(array, sizeArray);         // Creation of the array with small blocks
+            //int k = fillArraySmallBlocks(array, sizeArray);         // Creation of the array with small blocks
+            int k = populateSmallBlocks(array, sizeArray);
             Arrays.sort(array);
-            printArray(array, sizeArray);               // REMOVE: Just for testing purposes
-            System.out.println(k+ "\n");                // REMOVE: Just for testing purposes
+//            printArray(array, sizeArray);               // REMOVE: Just for testing purposes
+//            System.out.println(k+ "\n");                // REMOVE: Just for testing purposes
             comparisonsData[0] = sequential_search(array, k);       // testing O(n)
             comparisonsData[1] = binary_search(array, k);           // testing O(m + log(n))
             comparisonsData[2] = divide_conquer_search(array,k);    // testing O(log(n))
         } else {
-            int k2 = fillArrayBigBlocks(array, sizeArray);          // Creation of the array with large blocks
-            Arrays.sort(array);
-            printArray(array, sizeArray);               // REMOVE: Just for testing purposes
+            //int k2 = fillArrayBigBlocks(array, sizeArray);          // Creation of the array with large blocks
+            int k2 = populateBigBlocks(array, sizeArray);
+//            Arrays.sort(array);
+//            printArray(array, sizeArray);               // REMOVE: Just for testing purposes
             System.out.println(k2 + "\n");                // REMOVE: Just for testing purposes
             comparisonsData[0] = sequential_search(array, k2);       // testing O(n)
             comparisonsData[1] = binary_search(array, k2);           // testing O(m + log(n))
@@ -83,33 +86,56 @@ public class algo_visualizer {
     }
 
     /**
-     * This method populates the array randomly while maintaining SMALL blocks of duplicated keys.
-     * This is archived by producing random numbers in a range from 0 to a number bigger than the size of the array.
+     * We tried professor's advice for populating the arrays with small blocks by producing random numbers in a range
+     * from 0 to a number bigger than the size of the array. But we got weird results, binary search appeared to be
+     * always the fastest.
+     *
+     * Same for big blocks were we produced random numbers in a range from 0 to a number less than the size of the array.
      */
-    public int  fillArraySmallBlocks(int[] array, int sizeArray){
-        Random rnd = new Random();
-        for(int i = 0; i < sizeArray; i++){
-            array[i] = rnd.nextInt(sizeArray + 5);          // [0...sizeArray+10]
-        }
-
-        int k = rnd.nextInt(sizeArray + 5);                 // Get k
-        return k;
-    }
+//    public int  fillArraySmallBlocks(int[] array, int sizeArray){
+//        Random rnd = new Random();
+//        for(int i = 0; i < sizeArray; i++){
+//            array[i] = rnd.nextInt(sizeArray);          // [0...sizeArray]
+//        }
+//
+//        int k = rnd.nextInt(sizeArray);                 // Get k
+//        return k;
+//    }
+//
+//    public int  fillArrayBigBlocks(int[] array, int sizeArray){
+//        Random rnd = new Random();
+//        int maxRange = sizeArray  / 4;
+//        for(int i = 0; i < sizeArray; i++){
+//            array[i] = rnd.nextInt(maxRange);                       // [0...(sizeArray/2)]
+//        }
+//
+//        int k = rnd.nextInt(maxRange);
+//        return k;
+//    }
 
     /**
-     * This method populates the array randomly while maintaining BIG blocks of duplicated keys.
-     * This is archived by producing random numbers in a range from 0 to a number less than the size of the array.
+     * This problem got fixed using this other approach to fill the arrays
      */
-    public int  fillArrayBigBlocks(int[] array, int sizeArray){
+    public int  populateSmallBlocks(int[] array, int sizeArray){
         Random rnd = new Random();
-        int maxRange = sizeArray / 2;
         for(int i = 0; i < sizeArray; i++){
-            array[i] = rnd.nextInt(maxRange);                       // [0...(sizeArray/2)]
+            array[i] = rnd.nextInt(500);          // [0...500]
         }
 
-        int k = rnd.nextInt(maxRange);
+        int k = rnd.nextInt(500);                 // Get k
         return k;
     }
+
+    public int  populateBigBlocks(int[] array, int sizeArray){
+        Random rnd = new Random();
+        for(int i = 0; i < sizeArray; i++){
+            array[i] = rnd.nextInt(10);          // [0...10]
+        }
+
+        int k = rnd.nextInt(10);                 // Get k
+        return k;
+    }
+
 
     /**
      * printArray() simply prints an array
@@ -175,19 +201,18 @@ public class algo_visualizer {
             return comparisons;
         } else{
             count++;                        // k was found at least once using binary search
-
             int previous = loc - 1;
             comparisons++;                  // comparison for the while statement
-            while(previous >= 0 && array[previous] == k){
-                comparisons ++;
+            while(previous >= 0 && array[previous] == k){       //Check for k occurrences in the right if any
+                comparisons = comparisons + 2;       // Comparison is twice for the two statements I have in the loop
                 count++;
                 previous--;
             }
 
             int next = loc + 1;
             comparisons++;
-            while(next < array.length && array[next] == k){
-                comparisons ++;
+            while(next < array.length && array[next] == k){    //Check for k occurrences in the right if any
+                comparisons = comparisons + 2;       // Comparison is twice for the two statements I have in the loop
                 count++;
                 next++;
             }
@@ -229,7 +254,7 @@ public class algo_visualizer {
 
         while(first <= last){
             int middle = (first + last) /2;
-            comparisons++;   // We do two comparisons, with the while loop and with the if statement
+            comparisons = comparisons + 2;      // Comparison from while statement and if statement
             if (k <= array[middle]) {
                 last = middle -1;
             }else{
@@ -252,7 +277,7 @@ public class algo_visualizer {
 
         while(first <= last){
             int middle = (first + last) /2;
-            comparisons++;    // We do two comparisons, with the while loop and with the if statement
+            comparisons = comparisons + 2;      // Comparison from while statement and if statement
             if (k >= array[middle]) {
                 first  = middle + 1;
             }else{
